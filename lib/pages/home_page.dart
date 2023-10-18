@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
+import 'package:test_tirtakencana/models/customer.dart';
+import 'package:test_tirtakencana/pages/customer_card.dart';
+import 'package:test_tirtakencana/providers/customer_provider.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,7 +13,7 @@ class HomePage extends StatefulWidget {
 }
 class _HomePageState extends State<HomePage> {
   List<String> items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
-  String? _selectedItem = 'Item 1';
+  String? _selectedItem = 'Item 1';  
 
   @override
   Widget build(BuildContext context) {
@@ -83,10 +87,31 @@ class _HomePageState extends State<HomePage> {
                 ),
                 const SizedBox(width: 10.0,),
               ],
-            )
+            ),
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  return CustomerCard();
+                }, 
+                separatorBuilder: (context, index) => const SizedBox(height: 5), 
+                itemCount: 5,
+              ),
+            ),
           ],
         ),
       )
     );
+  }
+  
+  getLoadingUI() {
+
+  }
+  
+  getErrorUI(String error) {
+
+  }
+
+  getListView(Customer customer) {
+
   }
 }
