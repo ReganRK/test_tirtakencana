@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,14 +19,31 @@ class _HomePageState extends State<HomePage> {
           children: [
             Row(
               children: [
+                const SizedBox(width: 10.0,),
                 Expanded(
-                  child: DropdownButton(
+                  child: DropdownButtonFormField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(5),
+                        borderSide: const BorderSide(width: 3, color: Colors.green),
+                      ),
+                    ),
                     value: _selectedItem,
                     items: items
                       .map((item) => DropdownMenuItem<String>(
                           value: item,
-                          child: Text(
-                            item
+                          child: Row(
+                            children: [
+                              Image.asset(
+                                'assets/icons/home.png',
+                                height: 20,
+                                width: 20,
+                              ),
+                              const SizedBox(width: 10,),
+                              Text(
+                                item
+                              )
+                            ],
                           )
                         ),
                       ).toList(), 
@@ -36,14 +54,34 @@ class _HomePageState extends State<HomePage> {
                     },
                   ),
                 ),
+                const SizedBox(width: 10,),
                 ElevatedButton(
                   onPressed: () {
                     
-                  }, 
-                  child: Text(
-                    'Total Hadiah'
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xffE74B1B),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5)
+                    )
+                  ),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/icons/gift.svg',
+                        colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                      ),
+                      const SizedBox(width: 10,),
+                      const Text(
+                        'Total Hadiah',
+                        style: TextStyle(
+                          color: Colors.white
+                        ),
+                      )
+                    ],
                   )
                 ),
+                const SizedBox(width: 10.0,),
               ],
             )
           ],
