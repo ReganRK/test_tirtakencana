@@ -88,12 +88,13 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: 10.0,),
               ],
             ),
+            const SizedBox(height: 20,),
             Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) {
                   return CustomerCard();
                 }, 
-                separatorBuilder: (context, index) => const SizedBox(height: 5), 
+                separatorBuilder: (context, index) => const SizedBox(height: 20), 
                 itemCount: 5,
               ),
             ),
