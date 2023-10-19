@@ -1,22 +1,22 @@
 // To parse this JSON data, do
 //
-//     final customer = customerFromJson(jsonString);
+//     final customerModel = customerModelFromJson(jsonString);
 
 import 'dart:convert';
 
-Customer customerFromJson(String str) => Customer.fromJson(json.decode(str));
+CustomerModel customerModelFromJson(String str) => CustomerModel.fromJson(json.decode(str));
 
-String customerToJson(Customer data) => json.encode(data.toJson());
+String customerModelToJson(CustomerModel data) => json.encode(data.toJson());
 
-class Customer {
-    List<Datum> data;
+class CustomerModel {
+    List<Customer> data;
 
-    Customer({
+    CustomerModel({
         required this.data,
     });
 
-    factory Customer.fromJson(Map<String, dynamic> json) => Customer(
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+    factory CustomerModel.fromJson(Map<String, dynamic> json) => CustomerModel(
+        data: List<Customer>.from(json["data"].map((x) => Customer.fromJson(x))),
     );
 
     Map<String, dynamic> toJson() => {
@@ -24,38 +24,38 @@ class Customer {
     };
 }
 
-class Datum {
-    String custId;
+class Customer {
+    String id;
     String name;
     String address;
-    String branchCode;
-    String phoneNo;
+    String phoneno;
     List<String> hadiah;
+    List<int> received;
 
-    Datum({
-        required this.custId,
+    Customer({
+        required this.id,
         required this.name,
         required this.address,
-        required this.branchCode,
-        required this.phoneNo,
+        required this.phoneno,
         required this.hadiah,
+        required this.received,
     });
 
-    factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        custId: json["CustID"],
-        name: json["Name"],
-        address: json["Address"],
-        branchCode: json["BranchCode"],
-        phoneNo: json["PhoneNo"],
+    factory Customer.fromJson(Map<String, dynamic> json) => Customer(
+        id: json["id"],
+        name: json["name"],
+        address: json["address"],
+        phoneno: json["phoneno"],
         hadiah: List<String>.from(json["hadiah"].map((x) => x)),
+        received: List<int>.from(json["received"].map((x) => x)),
     );
 
     Map<String, dynamic> toJson() => {
-        "CustID": custId,
-        "Name": name,
-        "Address": address,
-        "BranchCode": branchCode,
-        "PhoneNo": phoneNo,
+        "id": id,
+        "name": name,
+        "address": address,
+        "phoneno": phoneno,
         "hadiah": List<dynamic>.from(hadiah.map((x) => x)),
+        "received": List<dynamic>.from(received.map((x) => x)),
     };
 }

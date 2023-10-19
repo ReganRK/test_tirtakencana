@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:test_tirtakencana/models/customer.dart';
 import 'package:test_tirtakencana/pages/customer_card.dart';
+import 'package:test_tirtakencana/pages/total_gift_dialog.dart';
 import 'package:test_tirtakencana/providers/customer_provider.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,8 +12,38 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 class _HomePageState extends State<HomePage> {
-  List<String> items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
-  String? _selectedItem = 'Item 1';  
+  List<String> items = [];
+  String? _selectedItem = '';
+
+  List<Customer> customers = [];
+
+  bool isLoading = false;
+
+  Future<void> refreshData() async{
+    setState(() {
+      isLoading = true;
+    });
+
+    final result = await CustomerProvider().getAll();
+
+    customers = result.data;
+
+    for (var customer in customers) {
+      items.add(customer.name);
+    }
+
+    _selectedItem = items[0];
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    refreshData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,6 +51,7 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Column(
           children: [
+            const SizedBox(height: 10,),
             Row(
               children: [
                 const SizedBox(width: 10.0,),
@@ -61,7 +92,12 @@ class _HomePageState extends State<HomePage> {
                 const SizedBox(width: 10,),
                 ElevatedButton(
                   onPressed: () {
-                    
+                    showDialog(
+                      context: context, 
+                      builder: (context) {
+                        return const TotalGiftDialog();
+                      },
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xffE74B1B),
@@ -89,30 +125,32 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             const SizedBox(height: 20,),
-            Expanded(
-              child: ListView.separated(
-                itemBuilder: (context, index) {
-                  return CustomerCard();
-                }, 
-                separatorBuilder: (context, index) => const SizedBox(height: 20), 
-                itemCount: 5,
-              ),
-            ),
+            isLoading ? Center(
+              child: CircularProgressIndicator(),
+            ) :
+            customerList(),
           ],
         ),
       )
     );
   }
-  
-  getLoadingUI() {
 
-  }
-  
-  getErrorUI(String error) {
-
-  }
-
-  getListView(Customer customer) {
-
+  Expanded customerList() {
+    return Expanded(
+            child: ListView.separated(
+              itemBuilder: (context, index) {
+                return CustomerCard(
+                  custId: customers[index].id,
+                  address: customers[index].address,
+                  hadiah: customers[index].hadiah,
+                  name: customers[index].name,
+                  phoneNo: customers[index].phoneno,
+                  received: customers[index].received,
+                );
+              }, 
+              separatorBuilder: (context, index) => const SizedBox(height: 20), 
+              itemCount: customers.length,
+            ),
+          );
   }
 }

@@ -1,33 +1,80 @@
-import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'package:test_tirtakencana/models/customer.dart';
-import 'package:http/http.dart' as http;
 
-class CustomerProvider extends ChangeNotifier{
-  static const apiEndPoint = 'http://127.0.0.1/api-test-tirtakencana/public/api';
+class CustomerProvider {
+  late Dio _dio;
+  String baseUrl = 'http://10.0.2.2/api-test-tirtakencana/public/api';
 
-  bool isLoading = true;
-  String error = '';
-  Customer customer = Customer(data: []);
+  CustomerProvider(){
+    _dio = Dio();
+  }
 
-  getData() async{
+  Future<CustomerModel> getAll() async{
+    var response = await _dio.get(
+      '$baseUrl/customers',
+      options: Options(
+        headers: {
+          "Content-Type": "application/json",
+        }
+      )
+    );
+
+    return CustomerModel.fromJson(response.data);
+  }
+
+  Future<void> updateSuccess(String tanggal, String id) async{
     try {
-      var url = Uri.https(apiEndPoint, '/customers');
-      var response = await http.post(url);
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
-
-      if (response.statusCode == 200) {
-        customer = customerFromJson(response.body);
+      var response = await _dio.put(
+        '$baseUrl/updateterima/$id',
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+          }
+        ),
+        data: {
+          "receiveddate": tanggal
+        },
+      );
+      
+      print(response.data);
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response?.data);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.requestOptions);
+        print(e.message);
       }
-      else{
-        error = 'Sumthing wong';
-      }
-
-    } catch (e) {
-      print(e.toString());
     }
+  }
 
-    isLoading = false;
-    notifyListeners();
+  Future<void> updateFail(String alasan, String id) async{
+    
+
+    try {
+      await _dio.put(
+        '$baseUrl/updatetolak/$id',
+        options: Options(
+          headers: {
+            "Content-Type": "application/json",
+          }
+        ),
+        data: {
+          "failedreason": alasan
+        },
+      );
+    } on DioException catch (e) {
+      if (e.response != null) {
+        print(e.response?.data);
+        print(e.response?.headers);
+        print(e.response?.requestOptions);
+      } else {
+        // Something happened in setting up or sending the request that triggered an Error
+        print(e.requestOptions);
+        print(e.message);
+      }
+    }
   }
 }
