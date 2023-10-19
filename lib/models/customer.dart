@@ -30,6 +30,7 @@ class Customer {
     String address;
     String phoneno;
     List<String> hadiah;
+    List<int> received;
 
     Customer({
         required this.id,
@@ -37,6 +38,7 @@ class Customer {
         required this.address,
         required this.phoneno,
         required this.hadiah,
+        required this.received,
     });
 
     factory Customer.fromJson(Map<String, dynamic> json) => Customer(
@@ -45,6 +47,7 @@ class Customer {
         address: json["address"],
         phoneno: json["phoneno"],
         hadiah: List<String>.from(json["hadiah"].map((x) => x)),
+        received: List<int>.from(json["received"].map((x) => x)),
     );
 
     Map<String, dynamic> toJson() => {
@@ -53,5 +56,6 @@ class Customer {
         "address": address,
         "phoneno": phoneno,
         "hadiah": List<dynamic>.from(hadiah.map((x) => x)),
+        "received": List<dynamic>.from(received.map((x) => x)),
     };
 }
