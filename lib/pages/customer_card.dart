@@ -2,9 +2,27 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class CustomerCard extends StatelessWidget {
-  const CustomerCard({super.key});
+class CustomerCard extends StatefulWidget {
+  final String custId;
+  final String name;
+  final String address;
+  final String phoneNo;
+  final List<String> hadiah;
 
+  const CustomerCard({
+    super.key,
+    required this.custId,
+    required this.name,
+    required this.address,
+    required this.phoneNo,
+    required this.hadiah,
+  });
+
+  @override
+  State<CustomerCard> createState() => _CustomerCardState();
+}
+
+class _CustomerCardState extends State<CustomerCard> {
   @override
   Widget build(BuildContext context) {
     return Container(

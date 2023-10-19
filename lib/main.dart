@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:test_tirtakencana/pages/home_page.dart';
-import 'package:test_tirtakencana/providers/customer_provider.dart';
 
 void main() {
   runApp(const MyApp());

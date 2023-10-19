@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:provider/provider.dart';
 import 'package:test_tirtakencana/models/customer.dart';
 import 'package:test_tirtakencana/pages/customer_card.dart';
 import 'package:test_tirtakencana/providers/customer_provider.dart';
@@ -14,6 +13,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<String> items = ['Item 1', 'Item 2', 'Item 3', 'Item 4'];
   String? _selectedItem = 'Item 1';  
+
+  List<Customer> customers = [];
+
+  bool isLoading = false;
+
+  Future<void> refreshData() async{
+    setState(() {
+      isLoading = true;
+    });
+
+    final result = await CustomerProvider().getAll();
+
+    customers = result.data;
+
+    setState(() {
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,10 +109,16 @@ class _HomePageState extends State<HomePage> {
             Expanded(
               child: ListView.separated(
                 itemBuilder: (context, index) {
-                  return CustomerCard();
+                  return CustomerCard(
+                    custId: customers[index].id,
+                    address: customers[index].address,
+                    hadiah: customers[index].hadiah,
+                    name: customers[index].name,
+                    phoneNo: customers[index].phoneno,
+                  );
                 }, 
                 separatorBuilder: (context, index) => const SizedBox(height: 20), 
-                itemCount: 5,
+                itemCount: customers.length,
               ),
             ),
           ],
